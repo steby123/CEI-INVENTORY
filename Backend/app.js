@@ -433,17 +433,19 @@ app.put("/Barang-keluar/:id", async(req, res) => {
 
 // server barang keluar detail
 app.get('/Barang-keluar-detail', async(req, res) => {
-    console.log(req.body);
+    
+    const tanggalKeluar = req.query.tanggal_keluar;
+    const tanggalMasuk = req.query.tanggal_masuk;
 
     try{
         const connection = await testConnection();
-        const query = ` SELECT 
-                            bm.tanggal AS IncomingDate,
+        let query = ` SELECT 
+                            DATE_FORMAT(bm.tanggal, '%m/%d/%y') AS IncomingDate,
                             CASE 
                                 WHEN bm.qty - COALESCE(SUM(bk.barang_keluar_qty), 0) <= 0 THEN 0 
                                 ELSE bm.qty - COALESCE(SUM(bk.barang_keluar_qty), 0) 
                             END AS IncomingQty,
-                            bk.tanggal AS OutgoingDate, -- Tanggal keluar
+                            DATE_FORMAT(bk.tanggal, '%m/%d/%y') AS OutgoingDate,
                             bm.part_number AS PartNumber,
                             bm.part_name AS PartName,
                             bm.uom AS UOM,
@@ -453,13 +455,27 @@ app.get('/Barang-keluar-detail', async(req, res) => {
                         LEFT JOIN 
                             barang_keluar bk ON bm.part_number = bk.part_number 
                                             AND bm.part_name = bk.part_name 
-                                            AND bm.uom = bk.uom
-                        GROUP BY 
+                                            AND bm.uom = bk.uom `
+                         
+                       
+        if (tanggalKeluar !== undefined && tanggalKeluar !== null && tanggalMasuk !== null && tanggalKeluar !== '' && tanggalMasuk !== '' && tanggalMasuk !== undefined) {
+            query += `WHERE
+            bm.tanggal BETWEEN ? AND ?
+            AND (bk.tanggal BETWEEN ? AND ?) `;
+        }
+
+        query += ` GROUP BY 
                             bm.id, bm.tanggal, bm.qty, bm.part_number, bm.part_name, bm.uom, bk.tanggal
                         ORDER BY 
-                            bm.tanggal; -- Mengurutkan berdasarkan tanggal masuk
-                        `;
-        const [results] = await connection.query(query);
+                            bm.tanggal;`;
+
+        let [results] = [];
+        if (tanggalKeluar !== undefined && tanggalKeluar !== null && tanggalMasuk !== null && tanggalKeluar !== '' && tanggalMasuk !== '' && tanggalMasuk !== undefined) {
+            [results] = await connection.query(query, [tanggalMasuk, tanggalKeluar,tanggalMasuk, tanggalKeluar]);
+        } else {
+            [results] = await connection.query(query);
+        }
+
         res.status(200).json(results);
         console.log(results);              
     }catch(err){
@@ -468,7 +484,7 @@ app.get('/Barang-keluar-detail', async(req, res) => {
         });
         console.log(err.message);
     }
-})
+});
 
 //server status sisa stock barang
 app.get('/Sisa-stock', async(req, res) => {

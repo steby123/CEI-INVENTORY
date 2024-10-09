@@ -1,15 +1,13 @@
 import LoadingScreen from "../../loading/loading";
 import SearchBar from "../../searchbar/searchbar";
 import NewPage from "../../newpage/newpage";
-import DonwoaldToExcel from "../../button-excel/donwoald-to-excel";
-import { TableBarangKeluarDetailHook } from "../../../../hook/barang-keluar-detail/table-barang-keluar-detail";
+import DownloadToExcel from '../../button-excel/donwoald-to-excel';
 import './table-barang-keluar-detail.css';
 
-
-const TableBarangKeluarDetail = () => {
+const TableBarangKeluarDetail = ({ hookDetail }) => {
     const {
         totalPages,
-        currentItems,
+        currentItem,
         currentPage,
         loading,
         search,
@@ -20,12 +18,15 @@ const TableBarangKeluarDetail = () => {
         handleNextPage,
         handlePreviousPage,
         navigateHandler,
-    } = TableBarangKeluarDetailHook();
+    } = hookDetail;
 
-    return(
+    console.log(currentItem);
+    console.log('TableBarangKeluarDetail Reload');
+
+    return (
         <div className="table-container">
             <div className="header-container">
-                <button className='back-remaining'onClick={navigateHandler} required={loading}>
+                <button className='back-remaining' onClick={navigateHandler} disabled={loading}>
                     {loading ? <LoadingScreen /> : 'Back'}
                 </button>
                 <SearchBar 
@@ -35,7 +36,7 @@ const TableBarangKeluarDetail = () => {
             </div>
             {loading ? (
                 <LoadingScreen />
-            ): (
+            ) : (
                 <table>
                     <thead>
                         <tr>
@@ -50,39 +51,40 @@ const TableBarangKeluarDetail = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {currentItems.length === 0 ? (
+                        {currentItem.length === 0 ? (
                             <tr>
-                                <td className="no-data" colSpan="6">Tidak ada data</td>
+                                <td className="no-data" colSpan="8">Tidak ada data</td>
                             </tr>
                         ) : (
-                            currentItems.map((item, index) => (
+                            currentItem.map((item, index) => (
                                 <tr key={index}>
                                     <td>{index + 1}</td>
                                     <td>{formatDate(item.IncomingDate)}</td>
                                     <td>{formatPrice(item.IncomingQty)}</td>
                                     <td>{formatDate(item.OutgoingDate)}</td>
                                     <td>{item.PartNumber}</td>
-                                    <td>{item.PartName}</td> 
+                                    <td>{item.PartName}</td>
                                     <td>{item.UOM}</td>
                                     <td>{formatPrice(item.OutgoingQty)}</td>
                                 </tr>
-                            ))
-                        )}
+                            )) 
+                        )} 
+                        
                     </tbody>
                 </table>
             )}
-            <DonwoaldToExcel 
+            <DownloadToExcel 
                 exportToExcel={exportToExcel}
             />
             <NewPage 
-                currentItems={currentItems} 
+                currentItems={currentItem} 
                 currentPage={currentPage} 
                 totalPages={totalPages} 
                 handlePreviousPage={handlePreviousPage} 
                 handleNextPage={handleNextPage} 
             />
         </div>
-    )
+    );
 }
 
 export default TableBarangKeluarDetail;
