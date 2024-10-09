@@ -1,0 +1,79 @@
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE input_data_barang (
+    id INT NOT NULL AUTO_INCREMENT,
+    part_number VARCHAR(255),
+    part_name VARCHAR(255),
+    uom VARCHAR(255),
+    PRIMARY KEY (id),
+    UNIQUE (part_number, part_name, uom)
+);
+
+CREATE TABLE master_data_division (
+    id INT NOT NULL AUTO_INCREMENT,
+    division_code VARCHAR(255) UNIQUE,
+    division_name VARCHAR(255),
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE barang_masuk (
+    id INT NOT NULL AUTO_INCREMENT,
+    doc_no VARCHAR(255),
+    division_id int
+    tanggal DATE,
+    part_number VARCHAR(255),
+    part_name VARCHAR(255),
+    uom VARCHAR(255),
+    qty BIGINT,
+    PRIMARY KEY (id),
+    FOREIGN KEY (part_number, part_name, uom)
+        REFERENCES input_data_barang(part_number, part_name, uom),
+    FOREIGN KEY (doc_no)
+        REFERENCES master_data_division(division_code),
+    FOREIGN key (division_id)
+        REFERENCES master_data_division(id)
+);
+
+CREATE TABLE barang_keluar (
+    id INT NOT NULL AUTO_INCREMENT,
+    tanggal DATE,
+    doc_no VARCHAR(255),
+    division_id int,
+    part_number VARCHAR(255),
+    part_name VARCHAR(255),
+    uom VARCHAR(255),
+    barang_keluar_qty BIGINT,
+    PRIMARY KEY (id),
+    FOREIGN KEY (part_number, part_name, uom)
+        REFERENCES input_data_barang(part_number, part_name, uom),
+    FOREIGN KEY (doc_no)
+        REFERENCES master_data_division(division_code),
+    FOREIGN KEY (division_id)
+        REFERENCES master_data_division(id)
+);
+
+CREATE TABLE sisa_stock (
+    id INT NOT NULL AUTO_INCREMENT,
+    doc_no VARCHAR(255),
+    division_no VARCHAR(255),
+    part_number VARCHAR(255),
+    part_name VARCHAR(255),
+    tanggal int,
+    barang_masuk_id int,
+    barang_keluar_id int,
+    uom VARCHAR(255),
+    sisa_stock_barang BIGINT,
+    PRIMARY KEY (id),
+    FOREIGN KEY (part_number, part_name, uom)
+        REFERENCES input_data_barang(part_number, part_name, uom),
+	FOREIGN KEY (doc_no) 
+        REFERENCES master_data_division(division_code),
+    FOREIGN key (barang_masuk_id)
+        REFERENCES barang_masuk(id),
+    FOREIGN key (barang_keluar_id)
+        REFERENCES barang_keluar(id)
+);

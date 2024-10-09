@@ -1,0 +1,126 @@
+/* table-master-data.css */
+
+.table-container {
+    width:80%;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    position: absolute;
+    top: 4%;
+    left: 60%;
+    transform: translateX(-50%);
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  th, td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+  }
+  
+  th {
+    background-color: #f0f0f0;
+  }
+
+  tbody {
+    background-color: #fff;
+  }
+  
+  tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  
+  tbody tr:hover {
+    background-color: #e9e9e9;
+  }
+
+  .no-data {
+    text-align: center;
+    padding: 20px;
+    font-size: 2rem;
+    font-style: italic;
+    color: black;
+    font-weight: bolder;
+    background-color: #f9f9f9; 
+    border: 1px solid #ddd; 
+    border-radius: 4px; 
+  }
+
+    .actions {
+      display: flex; /* Use flexbox for alignment */
+      justify-content: space-between; /* Space between buttons */
+  }
+  
+  .edit {
+      background-color: yellow;
+      color: black;
+      padding: 5px 10px; /* Smaller padding */
+      font-size: 0.9rem; /* Smaller font size */
+  }
+  
+  .edit:hover {
+      background-color: orange;
+  }
+  
+  .delete {
+      background-color: red;
+      margin-left: 5px; /* Reduce margin */
+      color: white;
+      padding: 5px 10px; /* Smaller padding */
+      font-size: 0.9rem; /* Smaller font size */
+  }
+  
+  .delete:hover {
+      background-color: rgb(212, 30, 30);
+  }
+  
+  .no-data {
+      text-align: center;
+      padding: 20px;
+      font-size: 1rem; /* Smaller font size */
+      font-style: italic;
+      color: black;
+      font-weight: bolder;
+      background-color: #f9f9f9;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+  }
+
+  .pagination-controls {
+    display: flex;
+    align-items: center; /* Center the items vertically */
+    justify-content: center; /* Center the items horizontally */
+    margin: 10px 0; /* Add some vertical space */
+    width: fit-content; /* Make the width fit the content */
+    margin-left: auto; /* Center it horizontally */
+    margin-right: auto; /* Center it horizontally */
+}
+
+.pagination-controls button {
+    background-color: #007bff; /* Button background color */
+    color: white; /* Text color */
+    border: none; /* Remove border */
+    padding: 5px 8px; /* Reduced padding for smaller buttons */
+    margin: 0 3px; /* Smaller margin on left and right */
+    border-radius: 4px; /* Rounded corners */
+    cursor: pointer; 
+    font-size: 0.9rem; 
+}
+
+.pagination-controls button:disabled {
+    background-color: #ccc; 
+    cursor: not-allowed; 
+}
+
+.pagination-controls span {
+  width:800%; 
+  text-align: center; 
+  font-size: 0.9rem; 
+  margin: 0 5px;
+}

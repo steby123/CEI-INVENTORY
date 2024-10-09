@@ -1,0 +1,50 @@
+.download-pdf-button{
+    position: relative;
+    width: 100px;
+    right: -45%;
+    background-color: #0097fc; /* Green */
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+button {
+    background-color: #4CAF50; /* Green */
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 10px 0;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+button:hover {
+    background-color: #45a049; /* Darker green */
+}
+
+.no-data {
+    text-align: center;
+    padding: 20px;
+    font-size: 2rem;
+    font-style: italic;
+    color: black;
+    font-weight: bolder;
+    background-color: #f9f9f9; 
+    border: 1px solid #ddd; 
+    border-radius: 4px; 
+  }
+
+  @media (max-width: 768px) {
+    .download-pdf-button {
+        right: 0;
+        width: 80%; /* Make button wider on smaller screens */
+        font-size: 14px; /* Adjust font size */
+    }
+}

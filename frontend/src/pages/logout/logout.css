@@ -1,0 +1,99 @@
+    .containers {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh; 
+        background-color: rgba(0, 0, 0, 0.5); 
+    }
+
+    .dialog {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); 
+        width: 100%;
+    }
+
+    p {
+        margin-bottom: 20px;
+        font-size: 1.2rem;
+        text-align: center; 
+    }
+
+    .button-container {
+        display: flex; /* Use flex for equal height */
+        width: 100%; /* Ensure it takes full width */
+    }
+
+    .logout-button,
+    .cancel-button {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 5px;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 1rem;
+        transition: background-color 0.3s ease;
+        width: 100px;
+        height: 40px;
+        position: relative;
+    }
+
+    .cancel-button-button {
+        background-color: #007bff;
+        color: white;
+    }
+
+    .logout-button img,
+    .cancel-button img {
+        width: 20px; 
+        height: auto;
+        position: absolute;
+        left: 15px;
+        transition: left 0.3s ease;
+    }
+
+    .logout-button:hover img,
+    .cancel-button:hover img {
+        left: calc(100% - 25px); 
+    }
+
+    .cancel-button:hover {
+        background-color: #0056b3; 
+    }
+
+    .logout-button {
+        background-color: #dc3545; 
+        color: white;
+    }
+
+    .logout-button:hover {
+        background-color: #c82333;
+    }
+
+    @media (max-width: 600px) {
+        p {
+            font-size: 1rem; 
+        }
+
+        .logout-button,
+        .cancel-button {
+            font-size: 0.9rem; 
+            padding: 8px 15px; 
+            width: 100%; 
+        }
+    }
+
+    @media (max-width: 400px) {
+        .logout-button,
+        .cancel-button {
+            font-size: 0.8rem; 
+            padding: 6px 12px; 
+        }
+    }

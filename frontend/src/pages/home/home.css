@@ -1,0 +1,45 @@
+.containers {
+  min-width: 100%;
+  min-height: 100vh;
+  background: linear-gradient(rgba(236, 230, 248, 0.7), rgba(239, 237, 250, 0.7)), url(../../src/assets/logo.CEI.JPG);
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.containers-text{
+    text-align: center;
+    max-width: 800px;
+}
+
+.containers-text h1 {
+  font-size: 60px;
+  font-weight: 600;
+  color: #ee2828;
+}
+
+.containers-text p{
+    max-width: 700px;
+    margin: 10px auto 20px;
+    line-height: 1.4;
+    color: black;
+}
+
+@media (max-width: 850px){
+  .containers-text h1{
+    font-size: 40px;
+  }
+}
+@media (max-width: 650px){
+  .containers-text h1{
+    font-size: 30px;
+    max-width: 400px;
+    margin: auto;
+  }
+  .containers-text p{
+    font-size: 14px;
+    margin: 15px auto 30px;
+  }
+}
+

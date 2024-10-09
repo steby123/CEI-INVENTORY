@@ -1,0 +1,23 @@
+@media (max-width: 768px) {
+    .form-containers {
+      width: 100%;
+      position: relative;
+      margin: 10px 0;
+    }
+
+    .table-container{
+        width: 100%;
+        position: relative;
+        margin: 10px 0;
+    }
+  
+    .containers {
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .containers-text {
+      width: 100%;
+    }
+  }
+  

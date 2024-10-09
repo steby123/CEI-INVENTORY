@@ -1,0 +1,43 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f8f9fa; /* Light background */
+    font-family: 'Arial', sans-serif;
+}
+
+.error-container {
+    text-align: center;
+    padding: 20px;
+    border: 2px solid #dc3545; /* Red border */
+    border-radius: 10px;
+    background-color: #ffffff; /* White background */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.error-container h1 {
+    font-size: 48px;
+    color: #dc3545; /* Red text color */
+}
+
+.error-container p {
+    font-size: 20px;
+    color: #6c757d; /* Grey text color */
+}
+
+.error-container a {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #007bff; /* Blue background */
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.error-container a:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
