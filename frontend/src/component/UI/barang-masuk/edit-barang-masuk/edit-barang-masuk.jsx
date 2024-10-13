@@ -9,25 +9,83 @@ const EditBarangMasuk = ({ item, onUpdate, onClose }) => {
         handleChange,
         handleSubmit 
     } = EditBarangMasukHook(item, onUpdate, onClose);
-
-    if(!item) return null;
     
     return (
         <div className="edit-container">
             <form onSubmit={handleSubmit}>
                 <h2>Edit Incoming Items</h2>
-                {Object.keys(formData).map((key) => (
-                    <div className="form-group" key={key}>
-                        <label>{key.replace(/([A-Z])/g, ' $1').toUpperCase()}</label>
+                    <div className="form-group">
+                        <label htmlFor='tanggal'>Date:</label>
                         <input
-                            type={key === 'tanggal' ? 'date' : 'text'}
-                            name={key}
-                            value={formData[key]}
+                            type='date'
+                            id='tanggal'
+                            name='tanggal'
+                            className='tanggal'
                             onChange={handleChange}
+                            value={formData.tanggal}
                             required
                         />
                     </div>
-                ))}
+                    <div className="form-group">
+                        <label htmlFor='doc_no'>Doc No:</label>
+                        <input
+                            type='text'
+                            id='doc_no'
+                            name='doc_no'
+                            className='doc_no'
+                            onChange={handleChange}
+                            value={formData.doc_no}
+                            required
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor='part_number'>Part Number:</label>
+                        <input
+                            type='text'
+                            id='part_number'
+                            name='part_number'
+                            className='part_number'
+                            onChange={handleChange}
+                            value={formData.part_number}
+                            required
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor='part_name'>Part Name:</label>
+                        <input
+                            type='text'
+                            id='part_name'
+                            name='part_name'
+                            className='part_name'
+                            onChange={handleChange}
+                            value={formData.part_name}
+                            required
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor='uom'>UOM:</label>
+                        <input
+                            type='text'
+                            id='uom'
+                            name='uom'
+                            className='uom'
+                            onChange={handleChange}
+                            value={formData.uom}
+                            required
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor='qty'>QTY:</label>
+                        <input
+                            type='number'
+                            id='qty'
+                            name='qty'
+                            className='qty'
+                            onChange={handleChange}
+                            value={formData.qty}
+                            required
+                        />
+                    </div>
                 <div className='button-container'>
                     <button type="submit" disabled={editLoading}>
                         {editLoading ? <LoadingScreen /> : 'Save'}

@@ -139,26 +139,18 @@ export const useBarangMasuk = () => {
         }
     };
 
-    const handleEdit = (item) => setSelectedItem(item);
-
-    const handleUpdate = async (item, updatedData) => {
-        setLoading(true);
-        try {
-            const res = await fetch(`http://localhost:3000/Barang-masuk/${item.id}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(updatedData)
-            });
-            if (res.ok) fetchData();
-        } catch (err) {
-            console.error('Error updating item:', err.message);
-        } finally {
-            setLoading(false);
-            setSelectedItem(null);
-        }
+    const handleEdit = (item) => {
+        setSelectedItem(item);
     };
 
-    const handleClose = () => setSelectedItem(null);
+    const handleUpdate = () => {
+        fetchData();
+        setSelectedItem(null);
+    };
+
+    const handleClose = () => {
+        setSelectedItem(null);
+    };
 
     const exportToExcel = () => {
         const ws = XLSX.utils.json_to_sheet(dataBarangMasuk);

@@ -4,9 +4,9 @@ export const EditBarangKeluarHook = (item, onUpdate) => {
     const [editLoading, setEditLoading] = useState(false);
     const [formData, setFormData] = useState({
         tanggal: '',
-        docNo: '',
-        partNumber: '',
-        partName: '',
+        doc_no: '',
+        part_number: '',
+        part_name: '',
         uom: '',
         qty: '',
     });
@@ -15,9 +15,9 @@ export const EditBarangKeluarHook = (item, onUpdate) => {
         if (item) {
             setFormData({
                 tanggal: item.tanggal,
-                docNo: item.doc_no,
-                partNumber: item.part_number,
-                partName: item.part_name,
+                doc_no: item.doc_no,
+                part_number: item.part_number,
+                part_name: item.part_name,
                 uom: item.uom,
                 qty: item.qty,
             });
@@ -26,7 +26,10 @@ export const EditBarangKeluarHook = (item, onUpdate) => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData((prevData) => ({ ...prevData, [name]: value }));
+        setFormData((prevData) => ({ 
+            ...prevData, 
+            [name]: value 
+        }));
     };
 
     const handleSubmit = async (e) => {

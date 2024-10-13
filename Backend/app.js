@@ -433,9 +433,9 @@ app.put("/Barang-keluar/:id", async(req, res) => {
 
 // server barang keluar detail
 app.get('/Barang-keluar-detail', async(req, res) => {
-    
     const tanggalKeluar = req.query.tanggal_keluar;
     const tanggalMasuk = req.query.tanggal_masuk;
+    console.log(tanggalMasuk, tanggalKeluar);
 
     try{
         const connection = await testConnection();

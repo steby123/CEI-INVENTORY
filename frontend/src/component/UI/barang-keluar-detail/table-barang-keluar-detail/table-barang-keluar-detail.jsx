@@ -58,7 +58,7 @@ const TableBarangKeluarDetail = ({ hookDetail }) => {
                         ) : (
                             currentItem.map((item, index) => (
                                 <tr key={index}>
-                                    <td>{index + 1 + (currentPage * 1) - 10}</td>
+                                    <td>{index + 1 + (currentPage - 1) * 10}</td>
                                     <td>{formatDate(item.IncomingDate)}</td>
                                     <td>{formatPrice(item.IncomingQty)}</td>
                                     <td>{formatDate(item.OutgoingDate)}</td>
