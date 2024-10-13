@@ -23,13 +23,13 @@ const TableBarangKeluar = ({barangKeluar}) => {
         handleClose,
         formatPrice,
         handleSearchChange,
-        navigationHandler
+        navigateHandler
     } = barangKeluar;
 
     return(
         <div className="table-container">
             <div className="header-container">
-                <button className='remaining-detail' onClick={navigationHandler} required={loading}>
+                <button className='remaining-detail' onClick={navigateHandler} required={loading}>
                     {loading ? <LoadingScreen /> : 'Detail'}
                 </button>
                 <SearchBar 
