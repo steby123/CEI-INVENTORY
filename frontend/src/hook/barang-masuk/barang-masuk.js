@@ -23,6 +23,12 @@ export const useBarangMasuk = () => {
         setLoading(true);
         try {
             const res = await fetch('http://localhost:3000/Barang-masuk');
+            if (!res.ok) {
+                if (res.status === 404) {
+                    console.error('Resource not found (404)');
+                }
+                throw new Error('Failed to fetch data');
+            }
             const result = await res.json();
             setDataBarangMasuk(result);
         } catch (err) {
@@ -35,7 +41,10 @@ export const useBarangMasuk = () => {
     // Form Handlers
     const barangMasukHandler = (e) => {
         const { name, value } = e.target;
-        setFormBarangMasuk(prevState => ({ ...prevState, [name]: value }));
+        setFormBarangMasuk(prevState => ({ 
+            ...prevState, 
+            [name]: value 
+        }));
     };
 
     const submitBarangMasukHandler = async (e) => {
@@ -68,11 +77,12 @@ export const useBarangMasuk = () => {
     };
 
     // Pagination Handlers
-    const handleNextPage = () => {
+    const handleNextPage = async() => {
         setLoading(true)
         try{
-            if (currentPage < Math.ceil(filteredData.length / itemsPerPage)) {
+            if (currentPage < totalPages) {
                 setCurrentPage(currentPage + 1);
+                await fetchData();
             } else {
                 console.log('Fail to go to next page');
             }
@@ -83,11 +93,12 @@ export const useBarangMasuk = () => {
         }
     };
 
-    const handlePreviousPage = () => {
+    const handlePreviousPage = async() => {
         setLoading(true)
         try{
             if (currentPage > 1) {
                 setCurrentPage(currentPage - 1);
+                await fetchData();
             } else {
                 console.log('Fail to go to previous page');
             }
@@ -109,7 +120,11 @@ export const useBarangMasuk = () => {
         item.part_number.toLowerCase().includes(search.toLowerCase()) ||
         item.part_name.toLowerCase().includes(search.toLowerCase())
     );
-    const currentItems = filteredData.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
+    const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+
 
     // Edit and Delete Handlers
     const handleDelete = async (id) => {
@@ -175,6 +190,7 @@ export const useBarangMasuk = () => {
         search,
         loading,
         currentItems,
+        totalPages,
         handleDelete,
         handleEdit,
         handleUpdate,

@@ -11,7 +11,10 @@ const FormBarangMasuk = ({ barangMasuk }) => {
 
     return (
         <div className='form-containers'>
-            <form className='form-control' method='POST' onSubmit={submitBarangMasukHandler}>
+            {formLoading ? (
+                <LoadingScreen />
+            ):(
+                <form className='form-control' method='POST' onSubmit={submitBarangMasukHandler}>
                 <div className="form-group">
                     <label htmlFor='tanggal'>Date:</label>
                     <input
@@ -88,6 +91,7 @@ const FormBarangMasuk = ({ barangMasuk }) => {
                     {formLoading ? <LoadingScreen /> : 'Submit'}
                 </button>   
             </form>
+            )}
         </div>
     );
 };

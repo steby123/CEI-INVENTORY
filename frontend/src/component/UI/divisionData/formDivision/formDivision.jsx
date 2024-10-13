@@ -11,7 +11,10 @@ const FormDivision = ({divisionData}) => {
 
     return(
         <div className='form-containers'>
-            <form action='/Division-data' className='form-control' method='POST' onSubmit={submitDivisionHandler}>
+            {loading ? (
+                <LoadingScreen />
+            ): (
+                <form action='/Division-data' className='form-control' method='POST' onSubmit={submitDivisionHandler}>
                 <div className="form-group">
                     <label htmlFor='division_code'>Division Code:</label>
                     <input
@@ -32,7 +35,7 @@ const FormDivision = ({divisionData}) => {
                         name='divisionName'
                         className='division_name'
                         onChange={divisionHandler}
-                        value={formDivision.divisionName}
+                        value={formDivision.division_name}
                         required
                     />
                 </div>
@@ -40,6 +43,7 @@ const FormDivision = ({divisionData}) => {
                     {loading ? <LoadingScreen /> : 'Submit'}
                 </button>   
             </form>
+            )}
         </div>
     )
 }

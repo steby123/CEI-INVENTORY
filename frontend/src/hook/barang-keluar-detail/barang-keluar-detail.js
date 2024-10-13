@@ -73,6 +73,12 @@ export const BarangKeluarDetailHook = () => {
 
             console.log(`Fetching data with params: ${queryParams}`);
             const res = await fetch(`http://localhost:3000/Barang-keluar-detail?${queryParams}`);
+            if (!res.ok) {
+                if (res.status === 404) {
+                    console.error('Resource not found (404)');
+                }
+                throw new Error('Failed to fetch data');
+            }
             const result = await res.json();
 
             if (Array.isArray(result)) {

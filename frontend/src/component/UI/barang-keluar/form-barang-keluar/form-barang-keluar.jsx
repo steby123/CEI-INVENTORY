@@ -6,12 +6,15 @@ const FormBarangKeluar = ({barangKeluar}) => {
         formLoading,
         FormBarangKeluar,
         changeHandler,
-        submitHandler
+        submitHandler,
     } = barangKeluar;
 
     return(
         <div className='form-containers'>
-            <form action='/Barang-keluar' className='form-control' method='POST' onSubmit={submitHandler}>
+            {formLoading ? (
+                <LoadingScreen /> 
+            ):(
+                <form action='/Barang-keluar' className='form-control' method='POST' onSubmit={submitHandler}>
                 <div className="form-group">
                     <label htmlFor='part_number'>Date:</label>
                     <input
@@ -88,6 +91,7 @@ const FormBarangKeluar = ({barangKeluar}) => {
                     {formLoading ? <LoadingScreen /> : 'Submit'}
                 </button>   
             </form>
+            )}
         </div>
     )
 }

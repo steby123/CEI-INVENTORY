@@ -1,4 +1,3 @@
-import { MasterDataHook } from '../../../../hook/master-data/Master-data';
 import LoadingScreen from '../../loading/loading';
 import './form-master.css';
 
@@ -12,7 +11,10 @@ const Formmaster = ({masterDataHook}) => {
         
     return (
         <div className='form-containers'>
-            <form action='/Master-data' className='form-control' method='POST' onSubmit={submitHandler}>
+            {isLoading ? (
+                <LoadingScreen />
+            ): (
+                <form action='/Master-data' className='form-control' method='POST' onSubmit={submitHandler}>
                 <div className="form-group">
                     <label htmlFor='part_number'>Part Number:</label>
                     <input
@@ -53,6 +55,7 @@ const Formmaster = ({masterDataHook}) => {
                     {isLoading ? <LoadingScreen /> : 'Submit'}
                 </button>   
             </form>
+            )}
         </div>
     );
 };

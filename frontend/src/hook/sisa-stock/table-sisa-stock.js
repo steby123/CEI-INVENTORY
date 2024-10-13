@@ -12,6 +12,12 @@ export const TableSisaStockHook = () => {
         setLoading(true);
         try {
             const response = await fetch('http://localhost:3000/Sisa-stock');
+            if (!response.ok) {
+                if (response.status === 404) {
+                    console.error('Resource not found (404)');
+                }
+                throw new Error('Failed to fetch data');
+            }
             const data = await response.json();
             setSisaDataStock(data);
         } catch (err) {

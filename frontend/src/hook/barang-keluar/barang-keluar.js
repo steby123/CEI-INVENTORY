@@ -40,6 +40,12 @@ export const useBarangKeluar = () => {
         setLoading(true);
         try {
             const res = await fetch('http://localhost:3000/Barang-keluar');
+            if (!res.ok) {
+                if (res.status === 404) {
+                    console.error('Resource not found (404)');
+                }
+                throw new Error('Failed to fetch data');
+            }
             const result = await res.json();
             setData(result);
         } catch (err) {
