@@ -46,7 +46,7 @@ const TableSisaStock = () => {
                         ) : (
                             currentItems.map((item, index) => (
                             <tr key={index}>
-                                <td>{index + 1}</td>
+                                <td>{index + 1 + (currentPage - 1) * 10}</td>
                                 <td>{item.part_number}</td>
                                 <td>{item.part_name}</td>
                                 <td>{item.uom}</td>

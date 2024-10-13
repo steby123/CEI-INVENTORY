@@ -1,47 +1,50 @@
-import { BarangMasukHook } from '../../../../hook/barang-masuk/barang-masuk';
 import LoadingScreen from '../../loading/loading';
 import './form-barang-masuk.css';
 
-const FormBarangMasuk = () => {
+const FormBarangMasuk = ({ barangMasuk }) => {
     const { 
         formLoading,
+        formBarangMasuk,
         barangMasukHandler, 
         submitBarangMasukHandler
-    } = BarangMasukHook();
+    } = barangMasuk;
 
-    return(
+    return (
         <div className='form-containers'>
-            <form action='/Barang-masuk' className='form-control' method='POST' onSubmit={submitBarangMasukHandler}>
+            <form className='form-control' method='POST' onSubmit={submitBarangMasukHandler}>
                 <div className="form-group">
-                    <label htmlFor='part_number'>Date:</label>
+                    <label htmlFor='tanggal'>Date:</label>
                     <input
                         type='date'
                         id='tanggal'
                         name='tanggal'
                         className='tanggal'
                         onChange={barangMasukHandler}
+                        value={formBarangMasuk.tanggal}
                         required
                     />
                 </div>
                 <div className="form-group">
-                    <label htmlFor='part_name'>Doc No:</label>
+                    <label htmlFor='doc_no'>Doc No:</label>
                     <input
                         type='text'
                         id='doc_no'
-                        name='docNo'
+                        name='doc_no'
                         className='doc_no'
                         onChange={barangMasukHandler}
+                        value={formBarangMasuk.doc_no}
                         required
                     />
                 </div>
                 <div className="form-group">
-                    <label htmlFor='part_name'>Part Number:</label>
+                    <label htmlFor='part_number'>Part Number:</label>
                     <input
                         type='text'
                         id='part_number'
-                        name='partNumber'
+                        name='part_number'
                         className='part_number'
                         onChange={barangMasukHandler}
+                        value={formBarangMasuk.part_number}
                         required
                     />
                 </div>
@@ -50,40 +53,43 @@ const FormBarangMasuk = () => {
                     <input
                         type='text'
                         id='part_name'
-                        name='partName'
+                        name='part_name'
                         className='part_name'
                         onChange={barangMasukHandler}
+                        value={formBarangMasuk.part_name}
                         required
                     />
                 </div>
                 <div className="form-group">
-                    <label htmlFor='part_name'>UOM:</label>
+                    <label htmlFor='uom'>UOM:</label>
                     <input
                         type='text'
                         id='uom'
                         name='uom'
                         className='uom'
                         onChange={barangMasukHandler}
+                        value={formBarangMasuk.uom}
                         required
                     />
                 </div>
                 <div className="form-group">
-                    <label htmlFor='part_name'>QTY:</label>
+                    <label htmlFor='qty'>QTY:</label>
                     <input
                         type='number'
                         id='qty'
                         name='qty'
                         className='qty'
                         onChange={barangMasukHandler}
+                        value={formBarangMasuk.qty}
                         required
                     />
                 </div>
-                <button type='submit' className='btn' required={formLoading}>
+                <button type='submit' className='btn' disabled={formLoading}>
                     {formLoading ? <LoadingScreen /> : 'Submit'}
                 </button>   
             </form>
         </div>
-    )
-}
+    );
+};
 
 export default FormBarangMasuk;

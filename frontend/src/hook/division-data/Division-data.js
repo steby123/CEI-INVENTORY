@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import * as XLSX from "xlsx";
 
-export const DivisionData = () => {
+export const DivisionDataHook = () => {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
@@ -17,7 +17,7 @@ export const DivisionData = () => {
         item.division_name.toLowerCase().includes(search.toLowerCase())
     );
 
-    const itemsPerPage = 20;
+    const itemsPerPage = 10;
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
@@ -29,6 +29,8 @@ export const DivisionData = () => {
                 setLoading(true);
                 setCurrentPage(currentPage + 1);
                 await fetchData();   
+            } else {
+                console.log('Fail to go to next page');
             }
         }catch(err){
             throw new Error(err.message);
@@ -43,7 +45,8 @@ export const DivisionData = () => {
                 setLoading(true);
                 setCurrentPage(currentPage - 1);
                 await fetchData();
-                
+            } else {
+                console.log('Fail to go to previous page');
             }
         }catch(err){
             throw new Error(err.message);
@@ -119,6 +122,7 @@ export const DivisionData = () => {
     };
 
     return {
+        formDivision,
         data,
         currentPage,
         totalPages,

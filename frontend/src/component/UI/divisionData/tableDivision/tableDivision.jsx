@@ -1,11 +1,10 @@
 import NewPage from '../../newpage/newpage';
 import SearchBar from '../../searchbar/searchbar';
 import DonwoaldToExcel from '../../button-excel/donwoald-to-excel';
-import { DivisionData } from '../../../../hook/division-data/Division-data';
 import './tableDivision.css';
 import LoadingScreen from '../../loading/loading';
 
-const TableDivision = () => {
+const TableDivision = ({divisionData}) => {
     const { 
         currentItems,
         currentPage, 
@@ -16,7 +15,7 @@ const TableDivision = () => {
         handlePreviousPage,  
         exportToExcel,
         handleSearchChange
-    } = DivisionData();
+    } = divisionData;
 
     return(
         <div className="table-container">
@@ -43,7 +42,7 @@ const TableDivision = () => {
                         ) : (
                             currentItems.map((item, index) => (
                                 <tr key={index}>
-                                    <td>{index + 1}</td>
+                                    <td>{index + 1 + (currentPage - 1) * 10}</td>
                                     <td>{item.division_code}</td>
                                     <td>{item.division_name}</td>
                                 </tr>

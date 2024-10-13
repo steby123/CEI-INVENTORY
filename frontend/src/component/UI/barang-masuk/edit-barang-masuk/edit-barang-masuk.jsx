@@ -10,6 +10,8 @@ const EditBarangMasuk = ({ item, onUpdate, onClose }) => {
         handleSubmit 
     } = EditBarangMasukHook(item, onUpdate, onClose);
 
+    if(!item) return null;
+    
     return (
         <div className="edit-container">
             <form onSubmit={handleSubmit}>

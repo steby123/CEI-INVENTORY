@@ -1,13 +1,13 @@
-import { DivisionData } from '../../../../hook/division-data/Division-data';
 import LoadingScreen from '../../loading/loading';
 import './formDivision.css';
 
-const FormDivision = () => {
+const FormDivision = ({divisionData}) => {
     const { 
+        formDivision,
         loading,
         divisionHandler,
         submitDivisionHandler 
-    } = DivisionData();
+    } = divisionData;
 
     return(
         <div className='form-containers'>
@@ -20,6 +20,7 @@ const FormDivision = () => {
                         name='divisionCode'
                         className='division_code'
                         onChange={divisionHandler}
+                        value={formDivision.divisionCode}
                         required
                     />
                 </div>
@@ -31,6 +32,7 @@ const FormDivision = () => {
                         name='divisionName'
                         className='division_name'
                         onChange={divisionHandler}
+                        value={formDivision.divisionName}
                         required
                     />
                 </div>

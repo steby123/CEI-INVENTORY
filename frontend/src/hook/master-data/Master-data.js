@@ -1,18 +1,83 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import * as XLSX from 'xlsx';
 
 export const MasterDataHook = () => {
+    const [data, setData] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [search, setSearch] = useState('');
+    const itemsPerPage = 10;
+
     const [formData, setFormData] = useState({
         partNumber: '',
         partName: '',
         uom: ''
     });
-    const [data, setData] = useState([]);
-    const [isLoading, setIsLoading] = useState(false);
-    const [search, setSearch] = useState('');
-    const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 20;
+
+    const handleSearchChange = (e) => {
+        setSearch(e.target.value);
+        setCurrentPage(1); 
+    };
+
+    const filteredData = data.filter(item =>
+        item.part_number.toLowerCase().includes(search.toLowerCase()) ||
+        item.part_name.toLowerCase().includes(search.toLowerCase())
+    );
+
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
+    const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+
+    const handleNextPage = () => {
+        try{
+            setLoading(true);
+            if (currentPage < totalPages) {
+                setCurrentPage(currentPage + 1);
+            } else {
+                console.log('Fail to go to next page');
+            }
+        }catch(err){
+            throw new Error(err.message);
+        }finally{
+            setLoading(false);
+        }
+    };
+
+    const handlePreviousPage = () => {
+        setLoading(true);
+        try{
+            if (currentPage > 1) {
+                setCurrentPage(currentPage - 1);
+            } else {
+                console.log('Fail to go to previous page');
+            }
+        }catch(err){
+            throw new Error(err.message);
+        }finally{
+            setLoading(false);
+        }
+    };
+
+    const fetchData = async () => {
+        setLoading(true);
+        try {
+            const res = await fetch('http://localhost:3000/Master-data');
+            if(!res.ok){
+                throw new Error('Failed to fetch data');
+            }
+            const data = await res.json();
+            setData(data);
+        } catch (err) {
+            console.log('Error fetching data', err.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchData();
+    }, []);
 
     const changeHandler = (e) => {
         const { name, value } = e.target;
@@ -24,9 +89,7 @@ export const MasterDataHook = () => {
 
     const submitHandler = async (e) => {
         e.preventDefault();
-        console.log(formData);
-
-        setIsLoading(true);
+        setLoading(true);
         try {
             const response = await fetch('http://localhost:3000/Master-data', {
                 method: 'POST',
@@ -35,44 +98,17 @@ export const MasterDataHook = () => {
                 },
                 body: JSON.stringify(formData)
             });
-            const result = await response.json();
-            console.log(result.message);
-
-            if (response.ok) {
-                setFormData({
-                    partNumber: '',
-                    partName: '',
-                    uom: ''
-                });
-                fetchData();
+            if (!response.ok) {
+                throw new Error('Failed to submit data');
             }
+            setFormData({partName:'', partNumber:'', uom:''});
+            fetchData();
         } catch (err) {
             console.log('failed to submit', err.message);
-            throw new Error(err.message);
-        } finally{
-            setIsLoading(false)
+        } finally {
+            setLoading(false);
         }
     };
-
-    const fetchData = async () => {
-        setIsLoading(true);
-        try {
-            const res = await fetch('http://localhost:3000/Master-data');
-            const data = await res.json();
-            console.log(data);
-            setData(data);
-            setCurrentPage(1); // Reset to first page on data fetch
-        } catch (err) {
-            console.log(err.message);
-            throw err;
-        } finally{
-            setIsLoading(false)
-        }
-    };
-
-    useEffect(() => {
-        fetchData();
-    }, []);
 
     const exportToExcel = () => {
         const ws = XLSX.utils.json_to_sheet(data);
@@ -81,73 +117,19 @@ export const MasterDataHook = () => {
         XLSX.writeFile(wb, 'Master.xlsx');
     };
 
-    const handleSearchChange = async(e) => {
-        setSearch(e.target.value);
-        setCurrentPage(1); // Reset to first page on search
-        setIsLoading(true);
-        try{
-            await new Promise(resolve => setTimeout(resolve, 1000));    
-        }catch(err){
-            console.log(err.message)
-        }finally{
-            setIsLoading(false)
-        }
-    };
-
-    // Corrected filtering logic
-    const filteredData = data.filter(item =>
-        item.part_number.toLowerCase().includes(search.toLowerCase()) ||
-        item.part_name.toLowerCase().includes(search.toLowerCase())
-    );
-
-    // Pagination Logic
-    const indexOfLastItem = currentPage * itemsPerPage;
-    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
-    const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-
-    const handleNextPage = async() => {
-        try{
-            if (currentPage < totalPages) {
-                setIsLoading(true)
-                setCurrentPage(currentPage + 1);
-                await fetchData();
-                
-            }
-        }catch(err){
-            throw new Error(err.message);
-        }finally{
-            setIsLoading(false)
-        }
-    };
-
-    const handlePreviousPage = async() => {
-        try{
-            if (currentPage > 1) {
-                setIsLoading(true)
-                setCurrentPage(currentPage - 1);
-                await fetchData();
-            }
-        }catch(err){
-            throw new Error(err.message)
-        }finally{
-            setIsLoading(false)
-        }
-    };
-
     return {
-        formData,
         data,
-        currentItems,
         currentPage,
         totalPages,
+        currentItems,
         search,
-        isLoading,
-        submitHandler,
+        loading,
+        formData,
         changeHandler,
+        submitHandler,
         exportToExcel,
         handleNextPage,
         handlePreviousPage,
-        handleSearchChange, 
+        handleSearchChange
     };
 };

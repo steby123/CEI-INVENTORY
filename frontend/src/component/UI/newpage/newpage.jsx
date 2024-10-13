@@ -6,7 +6,7 @@ const NewPage = ({handlePreviousPage, currentPage, totalPages, handleNextPage}) 
                 disabled={currentPage === 1}>
                 <i className="fas fa-angle-left"></i>
             </button>
-            <span>{currentPage} of {totalPages}</span>
+            <span>page {currentPage} of {totalPages}</span>
             <button 
                 onClick={handleNextPage} 
                 disabled={currentPage === totalPages}>

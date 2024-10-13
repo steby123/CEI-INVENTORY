@@ -9,36 +9,53 @@ export const BarangKeluarDetailHook = () => {
     const [search, setSearch] = useState('');
     const [tanggalMasuk, setTanggalMasuk] = useState(''); 
     const [tanggalKeluar, setTanggalKeluar] = useState(''); 
-    const [currentItem, setCurrentItem] = useState([]);
-    const [totalPages, setTotalPages] = useState(0);
-    const navigate = useNavigate();
-    const itemsPerPage = 20;
+    const itemsPerPage = 10;
 
-    const filteredDataBarangKeluarDetail = dataBarangKeluarDetail.filter((item) => {
-        return item.PartName.toLowerCase().includes(search.toLowerCase());
-    });
+    const filteredDataBarangKeluarDetail = dataBarangKeluarDetail.filter(item => 
+        item.PartName.toLowerCase().includes(search.toLowerCase())
+    );
 
+    const totalPages = Math.ceil(filteredDataBarangKeluarDetail.length / itemsPerPage);
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItem = filteredDataBarangKeluarDetail.slice(indexOfFirstItem, indexOfLastItem);
+
+    const navigate = useNavigate();
 
     const handleSearchChange = (e) => {
         setSearch(e.target.value);
-        setCurrentPage(1);
+        setCurrentPage(1); 
     };
 
-    const handleNextPage = async () => {
-        if (currentPage < totalPages) {
-            setLoading(true);
-            setCurrentPage(currentPage + 1);
-            await fetchDataOutComingDetail();
+    const handleNextPage = async() => {
+        setLoading(true)
+        try{
+            if (currentPage < totalPages) {
+                setCurrentPage(currentPage + 1);
+                await fetchDataOutComingDetail();
+            } else{
+                console.log('Fail to go to next page');
+            }
+        }catch(err){
+            throw new Error(err.message);
+        }finally{
+            setLoading(false)
         }
     };
 
-    const handlePreviousPage = async () => {
-        if (currentPage > 1) {
-            setLoading(true);
-            setCurrentPage(currentPage - 1);
-            await fetchDataOutComingDetail();
+    const handlePreviousPage = async() => {
+        setLoading(true)
+        try{
+            if (currentPage > 1) {
+                setCurrentPage(currentPage - 1);
+                await fetchDataOutComingDetail()
+            } else {
+                console.log('Fail to go to previous page')
+            }
+        }catch(err){
+            throw new Error(err.message)
+        }finally{
+            setLoading(false)
         }
     };
 
@@ -54,22 +71,19 @@ export const BarangKeluarDetailHook = () => {
                 tanggal_keluar: tanggalKeluar,
             }).toString();
 
-                console.log(`Fetching data with params: ${queryParams}`);
-                const res = await fetch(`http://localhost:3000/Barang-keluar-detail?${queryParams}`);
-                const result = await res.json();
-                console.log('Hook Load');
+            console.log(`Fetching data with params: ${queryParams}`);
+            const res = await fetch(`http://localhost:3000/Barang-keluar-detail?${queryParams}`);
+            const result = await res.json();
+
             if (Array.isArray(result)) {
                 setDataBarangKeluarDetail(result);
-
-                let filter = result.slice(indexOfFirstItem, indexOfLastItem);
-                setCurrentItem(filter);
-                setTotalPages(Math.ceil(filter.length / itemsPerPage));
-                setLoading(false);
             } else {
                 console.error('Unexpected data structure:', result);
             }
         } catch (err) {
             console.error(err.message);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -107,7 +121,6 @@ export const BarangKeluarDetailHook = () => {
 
     useEffect(() => {
         fetchDataOutComingDetail(); 
-        console.log('Effect');
     }, []);
 
     return {
@@ -117,7 +130,8 @@ export const BarangKeluarDetailHook = () => {
         totalPages,
         currentItem,
         tanggalMasuk, 
-        tanggalKeluar, 
+        tanggalKeluar,
+        dataBarangKeluarDetail,
         exportToExcel,
         formatPrice,
         formatDate,
@@ -128,6 +142,5 @@ export const BarangKeluarDetailHook = () => {
         submitTanggalHandler, 
         TanggalMasukHandler, 
         TanggalKeluarHandler,
-        dataBarangKeluarDetail
     };
 };

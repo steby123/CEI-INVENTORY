@@ -2,11 +2,10 @@ import EditBarangKeluar from '../edit-barang-keluar/edit-barang-keluar';
 import SearchBar from '../../searchbar/searchbar';
 import NewPage from '../../newpage/newpage';
 import DonwoaldToExcel from '../../button-excel/donwoald-to-excel';
-import { TableBarangKeluarHook } from '../../../../hook/barang-keluar/table-barang-keluar';
-import './tabel-barang-keluar.css';
 import LoadingScreen from '../../loading/loading';
+import './tabel-barang-keluar.css';
 
-const TableBarangKeluar = () => {
+const TableBarangKeluar = ({barangKeluar}) => {
     const {
         selectedItem, 
         currentItems,
@@ -25,7 +24,7 @@ const TableBarangKeluar = () => {
         formatPrice,
         handleSearchChange,
         navigationHandler
-    } = TableBarangKeluarHook();
+    } = barangKeluar;
 
     return(
         <div className="table-container">
@@ -62,7 +61,7 @@ const TableBarangKeluar = () => {
                         ) : (
                             currentItems.map((item, index) => (
                                 <tr key={index}>
-                                    <td>{index + 1}</td>
+                                    <td>{index + 1 + (currentPage - 1) * 10}</td>
                                     <td>{formatDate(item.tanggal)}</td>
                                     <td>{item.doc_no}</td>
                                     <td>{item.part_number}</td>

@@ -6,7 +6,7 @@ export const TableSisaStockHook = () => {
     const [loading, setLoading] = useState(false);
     const [search, setSearch] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 20;
+    const itemsPerPage = 10;
 
     const fetchData = async () => {
         setLoading(true);

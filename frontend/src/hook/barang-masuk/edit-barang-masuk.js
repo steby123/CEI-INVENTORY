@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-export const EditBarangMasukHook = (item, onUpdate) => {
+export const EditBarangMasukHook = (item, onUpdate, onClose) => {
     const [editLoading, setEditLoading] = useState(false);
     const [formData, setFormData] = useState({
         tanggal: '',
@@ -14,12 +14,12 @@ export const EditBarangMasukHook = (item, onUpdate) => {
     useEffect(() => {
         if (item) {
             setFormData({
-                tanggal: item.tanggal,
-                docNo: item.doc_no,
-                partNumber: item.part_number,
-                partName: item.part_name,
-                uom: item.uom,
-                qty: item.qty,
+                tanggal: item.tanggal || '',
+                docNo: item.doc_no || '',
+                partNumber: item.part_number || '',
+                partName: item.part_name || '',
+                uom: item.uom || '',
+                qty: item.qty || '',
             });
             }
     }, [item]);
@@ -41,7 +41,8 @@ export const EditBarangMasukHook = (item, onUpdate) => {
                     body: JSON.stringify(formData),
                 });
                 if (res.ok) {
-                    onUpdate();
+                   await onUpdate();
+                   onClose();
                 } else {
                     console.log('Failed to update data');
                 }

@@ -220,14 +220,14 @@ app.get('/Division-data', async(req, res) => {
 //server barang-masuk
 app.post('/Barang-masuk', async(req, res) => {
     console.log(req.body);
-    const { tanggal, docNo, partNumber, partName, uom, qty } = req.body;
+    const { tanggal, doc_no, part_number, part_name, uom, qty } = req.body;
 
     try {
         const connection = await testConnection();
 
         const [partExists] = await connection.query(
             "SELECT * FROM input_data_barang where part_number = ? AND part_name = ? AND uom = ?",
-            [partNumber, partName, uom]
+            [part_number, part_name, uom]
         );
 
         if(partExists.length === 0){
@@ -238,7 +238,7 @@ app.post('/Barang-masuk', async(req, res) => {
 
         await connection.query(
             "INSERT INTO barang_masuk (doc_no, tanggal, part_number, part_name, uom, qty) VALUES (?, ?, ?, ?, ?, ?)",
-            [docNo, tanggal,  partNumber, partName, uom, qty]
+            [doc_no, tanggal,  part_number, part_name, uom, qty]
         );
             
         console.log('Data saved successfully');
@@ -296,13 +296,13 @@ app.delete('/Barang-masuk/:id', async(req, res) => {
 // server untuk mengganti data server
 app.put('/Barang-masuk/:id', async(req, res) => {
     const {id} = req.params;
-    const {tanggal, partNumber, partName, uom, qty} = req.body;
+    const {tanggal, part_number, part_name, uom, qty} = req.body;
 
     try{
         const connection = await testConnection();
         await  connection.query(
             'UPDATE barang_masuk SET tanggal = ?, part_number = ?, part_name = ?, uom = ?, qty = ? WHERE id = ?', 
-            [tanggal, partNumber, partName, uom, qty, id]
+            [tanggal, part_number, part_name, uom, qty, id]
         )
         res.status(200).json({
             message: 'Data updated successfully'
@@ -318,14 +318,14 @@ app.put('/Barang-masuk/:id', async(req, res) => {
 //server status barang keluar
 app.post("/Barang-keluar", async (req, res) => {
     console.log(req.body);
-    const { tanggal, docNo, partNumber, partName, uom, qty } = req.body;
+    const { tanggal, doc_no, part_number, part_name, uom, qty } = req.body;
 
     try {
         const connection = await testConnection();
 
         const [partExists] = await connection.query(
             "SELECT * FROM input_data_barang where part_number = ? AND part_name = ? AND uom = ?",
-            [partNumber, partName, uom]
+            [part_number, part_name, uom]
         );
 
         if(partExists.length === 0){
@@ -336,7 +336,7 @@ app.post("/Barang-keluar", async (req, res) => {
 
         await connection.query(
             "INSERT INTO barang_keluar (doc_no, tanggal, part_number, part_name, uom, barang_keluar_qty) VALUES (?, ?, ?, ?, ?, ?)",
-            [docNo, tanggal,  partNumber, partName, uom, qty]
+            [doc_no, tanggal,  part_number, part_name, uom, qty]
         );
         console.log('Data saved successfully');
         res.status(201).json({
@@ -411,14 +411,14 @@ app.delete("/Barang-keluar/:id", async(req, res) => {
 // server mengupdate data barang keluar 
 app.put("/Barang-keluar/:id", async(req, res) => {
     const {id} = req.params;
-    const {tanggal, partNumber, partName, uom, qty} = req.body;
-    console.log(id, tanggal, partNumber, partName, uom, qty);
+    const {tanggal, part_number, part_name, uom, qty} = req.body;
+    console.log(id, tanggal, part_number, part_name, uom, qty);
 
     try{
         const connection = await testConnection();
         await  connection.query(
             'UPDATE barang_keluar SET tanggal = ?, part_number = ?, part_name = ?, uom = ?, barang_keluar_qty = ? WHERE id = ?', 
-            [tanggal, partNumber, partName, uom, qty, id]
+            [tanggal, part_number, part_name, uom, qty, id]
         )
         res.status(200).json({
             message: 'Data updated successfully'

@@ -2,11 +2,10 @@ import NewPage from '../../newpage/newpage';
 import SearchBar from '../../searchbar/searchbar';
 import EditBarangMasuk from '../edit-barang-masuk/edit-barang-masuk';
 import DonwoaldToExcel from '../../button-excel/donwoald-to-excel';
-import { TableBarangMasukHook } from '../../../../hook/barang-masuk/table-barang-masuk';
-import './tabel-barang-masuk.css';
 import LoadingScreen from '../../loading/loading';
+import './tabel-barang-masuk.css';
 
-const TableBarangMasuk = () => {
+const TableBarangMasuk = ({barangMasuk}) => {
     const {
         selectedItem,
         currentItems,
@@ -24,7 +23,7 @@ const TableBarangMasuk = () => {
         handlePreviousPage,
         handleNextPage,
         handleSearchChange
-    } = TableBarangMasukHook();
+    } = barangMasuk;
     
     return(
         <div className="table-container">
@@ -56,7 +55,7 @@ const TableBarangMasuk = () => {
                         ) : (
                             currentItems.map((item, index) => (
                                 <tr key={index}>
-                                    <td>{index + 1}</td>
+                                    <td>{index + 1 + (currentPage - 1) * 10}</td>
                                     <td>{formatDate(item.tanggal)}</td>
                                     <td>{item.doc_no}</td>
                                     <td>{item.part_number}</td>

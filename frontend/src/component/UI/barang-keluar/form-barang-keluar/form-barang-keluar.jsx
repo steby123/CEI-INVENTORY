@@ -1,13 +1,13 @@
-import { FormBarangKeluarHook } from '../../../../hook/barang-keluar/form-barang-keluar';
 import LoadingScreen from '../../loading/loading';
 import './form-barang-keluar.css';
 
-const FormBarangKeluar = () => {
+const FormBarangKeluar = ({barangKeluar}) => {
     const {
         formLoading,
+        FormBarangKeluar,
         changeHandler,
         submitHandler
-    } = FormBarangKeluarHook();
+    } = barangKeluar;
 
     return(
         <div className='form-containers'>
@@ -20,6 +20,7 @@ const FormBarangKeluar = () => {
                         name='tanggal'
                         className='date'
                         onChange={changeHandler}
+                        value={FormBarangKeluar.tanggal}
                         required
                     />
                 </div>
@@ -28,9 +29,10 @@ const FormBarangKeluar = () => {
                     <input
                         type='text'
                         id='doc_no'
-                        name='docNo'
+                        name='doc_no'
                         className='doc_no'
                         onChange={changeHandler}
+                        value={FormBarangKeluar.doc_no}
                         required
                     />
                 </div>
@@ -39,9 +41,10 @@ const FormBarangKeluar = () => {
                     <input
                         type='text'
                         id='part_number'
-                        name='partNumber'
+                        name='part_number'
                         className='part_number'
                         onChange={changeHandler}
+                        value={FormBarangKeluar.part_number}
                         required
                     />
                 </div>
@@ -50,9 +53,10 @@ const FormBarangKeluar = () => {
                     <input
                         type='text'
                         id='part_name'
-                        name='partName'
+                        name='part_name'
                         className='part_name'
                         onChange={changeHandler}
+                        value={FormBarangKeluar.part_name}
                         required
                     />
                 </div>
@@ -64,6 +68,7 @@ const FormBarangKeluar = () => {
                         name='uom'
                         className='uom'
                         onChange={changeHandler}
+                        value={FormBarangKeluar.uom}
                         required
                     />
                 </div>
@@ -75,6 +80,7 @@ const FormBarangKeluar = () => {
                         name='qty'
                         className='qty'
                         onChange={changeHandler}
+                        value={FormBarangKeluar.qty}
                         required
                     />
                 </div>

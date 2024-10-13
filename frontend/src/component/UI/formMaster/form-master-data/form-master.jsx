@@ -2,12 +2,13 @@ import { MasterDataHook } from '../../../../hook/master-data/Master-data';
 import LoadingScreen from '../../loading/loading';
 import './form-master.css';
 
-const Formmaster = () => {
+const Formmaster = ({masterDataHook}) => {
     const { 
         isLoading,
         submitHandler, 
-        changeHandler
-    } = MasterDataHook();
+        changeHandler,
+        formData
+    } = masterDataHook;
         
     return (
         <div className='form-containers'>
@@ -20,6 +21,7 @@ const Formmaster = () => {
                         name='partNumber'
                         className='part_number'
                         onChange={changeHandler}
+                        value={formData.partNumber}
                         required
                     />
                  </div>
@@ -31,6 +33,7 @@ const Formmaster = () => {
                         name='partName'
                         className='part_name'
                         onChange={changeHandler}
+                        value={formData.partName}
                         required
                     />
                 </div>
@@ -42,6 +45,7 @@ const Formmaster = () => {
                         name='uom'
                         className='uom'
                         onChange={changeHandler}
+                        value={formData.uom}
                         required
                     />
                 </div>
