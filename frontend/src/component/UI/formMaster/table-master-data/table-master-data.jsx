@@ -10,7 +10,7 @@ const TableMasterData = ({masterDataHook}) => {
         currentPage, 
         totalPages,
         search,
-        isLoading,
+        loading,
         exportToExcel, 
         handleNextPage, 
         handlePreviousPage,  
@@ -23,7 +23,7 @@ const TableMasterData = ({masterDataHook}) => {
                 search={search} 
                 handleSearchChange={handleSearchChange}  
             />
-            {isLoading ? (
+            {loading ? (
                 <LoadingScreen />
             ): (
                 <table>
@@ -38,7 +38,7 @@ const TableMasterData = ({masterDataHook}) => {
                 <tbody>
                     {currentItems.length === 0 ? (
                         <tr>
-                            <td className="no-data" colSpan="4">Tidak ada data</td>
+                            <td className="no-data" colSpan="4">No Data</td>
                         </tr>
                     ) : (
                         currentItems.map((item, index) => (

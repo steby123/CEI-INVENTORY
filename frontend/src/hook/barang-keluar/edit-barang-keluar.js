@@ -4,17 +4,22 @@ export const EditBarangKeluarHook = (item, onUpdate) => {
     const [editLoading, setEditLoading] = useState(false);
     const [formData, setFormData] = useState({
         tanggal: '',
+        divisionCode: '',
+        divisionName: '',
         doc_no: '',
         part_number: '',
         part_name: '',
         uom: '',
         qty: '',
     });
+    const [errorMessage, setErrorMessage] = useState('');
 
     useEffect(() => {
         if (item) {
             setFormData({
                 tanggal: item.tanggal,
+                divisionCode: item.divisionCode,
+                divisionName: item.divisionName,
                 doc_no: item.doc_no,
                 part_number: item.part_number,
                 part_name: item.part_name,
@@ -46,9 +51,12 @@ export const EditBarangKeluarHook = (item, onUpdate) => {
             if (res.ok) {
                 onUpdate();
             } else {
+                const error = await res.json();
+                setErrorMessage(error.message || 'Failed to update item');
                 console.log('Failed to update data');
             }
         } catch (err) {
+            setErrorMessage('An error occurred while submitting the form.')
             console.error(err.message);
         }finally{
             setEditLoading(false);
@@ -58,6 +66,7 @@ export const EditBarangKeluarHook = (item, onUpdate) => {
     return{
         formData,
         editLoading,
+        errorMessage,
         handleChange,
         handleSubmit,
     }

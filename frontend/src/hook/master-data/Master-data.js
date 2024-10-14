@@ -5,14 +5,14 @@ export const MasterDataHook = () => {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
+    const [errorMessage, setErrorMessage] = useState('');
     const [search, setSearch] = useState('');
-    const itemsPerPage = 10;
-
     const [formData, setFormData] = useState({
         partNumber: '',
         partName: '',
         uom: ''
     });
+    const itemsPerPage = 10;
 
     const handleSearchChange = (e) => {
         setSearch(e.target.value);
@@ -30,8 +30,8 @@ export const MasterDataHook = () => {
     const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
     const handleNextPage = () => {
+        setLoading(true);
         try{
-            setLoading(true);
             if (currentPage < totalPages) {
                 setCurrentPage(currentPage + 1);
             } else {
@@ -101,12 +101,20 @@ export const MasterDataHook = () => {
                 },
                 body: JSON.stringify(formData)
             });
-            if (!response.ok) {
-                throw new Error('Failed to submit data');
+            if (response.ok) {
+                setFormData({
+                    partName:'', 
+                    partNumber:'', 
+                    uom:''
+                });
+                fetchData();
+            }else {
+                const error = await response.json();
+                setErrorMessage(error.message || 'Failed to create data');
+                console.log(error)
             }
-            setFormData({partName:'', partNumber:'', uom:''});
-            fetchData();
         } catch (err) {
+            setErrorMessage('An error occurred while submitting the form.')
             console.log('failed to submit', err.message);
         } finally {
             setLoading(false);
@@ -128,6 +136,7 @@ export const MasterDataHook = () => {
         search,
         loading,
         formData,
+        errorMessage,
         changeHandler,
         submitHandler,
         exportToExcel,

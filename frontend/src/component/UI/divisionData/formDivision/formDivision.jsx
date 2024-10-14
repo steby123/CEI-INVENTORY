@@ -1,10 +1,12 @@
 import LoadingScreen from '../../loading/loading';
+import ErrorMessage from '../../Error-message/error-message';
 import './formDivision.css';
 
 const FormDivision = ({divisionData}) => {
     const { 
         formDivision,
         loading,
+        errorMessage,
         divisionHandler,
         submitDivisionHandler 
     } = divisionData;
@@ -15,6 +17,11 @@ const FormDivision = ({divisionData}) => {
                 <LoadingScreen />
             ): (
                 <form action='/Division-data' className='form-control' method='POST' onSubmit={submitDivisionHandler}>
+                {errorMessage && (
+                    <ErrorMessage 
+                        errorMessage={errorMessage}
+                    />
+                )}
                 <div className="form-group">
                     <label htmlFor='division_code'>Division Code:</label>
                     <input

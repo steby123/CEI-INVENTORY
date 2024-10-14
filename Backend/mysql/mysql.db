@@ -15,15 +15,17 @@ CREATE TABLE input_data_barang (
 
 CREATE TABLE master_data_division (
     id INT NOT NULL AUTO_INCREMENT,
-    division_code VARCHAR(255) UNIQUE,
-    division_name VARCHAR(255),
-    PRIMARY KEY (id)
+    division_code VARCHAR(255) NOT NULL,
+    division_name VARCHAR(255) NOT NULL,
+    PRIMARY KEY (id),
+    UNIQUE(division_code, division_name)
 );
 
 CREATE TABLE barang_masuk (
     id INT NOT NULL AUTO_INCREMENT,
+    division_code VARCHAR(255),
+    division_name VARCHAR(255),
     doc_no VARCHAR(255),
-    division_id int
     tanggal DATE,
     part_number VARCHAR(255),
     part_name VARCHAR(255),
@@ -32,17 +34,16 @@ CREATE TABLE barang_masuk (
     PRIMARY KEY (id),
     FOREIGN KEY (part_number, part_name, uom)
         REFERENCES input_data_barang(part_number, part_name, uom),
-    FOREIGN KEY (doc_no)
-        REFERENCES master_data_division(division_code),
-    FOREIGN key (division_id)
-        REFERENCES master_data_division(id)
+    FOREIGN KEY (division_code, division_name)
+        REFERENCES master_data_division(division_code, division_name)
 );
 
 CREATE TABLE barang_keluar (
     id INT NOT NULL AUTO_INCREMENT,
     tanggal DATE,
+    division_code VARCHAR(255),
+    division_name VARCHAR(255),
     doc_no VARCHAR(255),
-    division_id int,
     part_number VARCHAR(255),
     part_name VARCHAR(255),
     uom VARCHAR(255),
@@ -50,10 +51,8 @@ CREATE TABLE barang_keluar (
     PRIMARY KEY (id),
     FOREIGN KEY (part_number, part_name, uom)
         REFERENCES input_data_barang(part_number, part_name, uom),
-    FOREIGN KEY (doc_no)
-        REFERENCES master_data_division(division_code),
-    FOREIGN KEY (division_id)
-        REFERENCES master_data_division(id)
+    FOREIGN KEY (division_code, division_name)
+        REFERENCES master_data_division(division_code, division_name)
 );
 
 CREATE TABLE sisa_stock (

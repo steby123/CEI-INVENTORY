@@ -15,8 +15,6 @@ export const NavbarHook = () => {
         console.log('click')
     }
 
-
-
     return{
         sticky,
         menuIcon,

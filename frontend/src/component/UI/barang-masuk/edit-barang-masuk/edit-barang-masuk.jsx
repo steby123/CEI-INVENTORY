@@ -1,4 +1,5 @@
 import { EditBarangMasukHook } from '../../../../hook/barang-masuk/edit-barang-masuk';
+import ErrorMessage from '../../Error-message/error-message';
 import LoadingScreen from '../../loading/loading';
 import './edit-barang-masuk.css';
 
@@ -6,6 +7,7 @@ const EditBarangMasuk = ({ item, onUpdate, onClose }) => {
     const {
         formData,
         editLoading,
+        errorMessage,
         handleChange,
         handleSubmit 
     } = EditBarangMasukHook(item, onUpdate, onClose);
@@ -13,6 +15,11 @@ const EditBarangMasuk = ({ item, onUpdate, onClose }) => {
     return (
         <div className="edit-container">
             <form onSubmit={handleSubmit}>
+                {errorMessage && (
+                    <ErrorMessage 
+                        errorMessage={errorMessage}
+                    />
+                )}
                 <h2>Edit Incoming Items</h2>
                     <div className="form-group">
                         <label htmlFor='tanggal'>Date:</label>
@@ -23,6 +30,30 @@ const EditBarangMasuk = ({ item, onUpdate, onClose }) => {
                             className='tanggal'
                             onChange={handleChange}
                             value={formData.tanggal}
+                            required
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor='divisionCode'>Division Code:</label>
+                        <input
+                            type='text'
+                            id='divisionCode'
+                            name='divisionCode'
+                            className='divisionCode'
+                            onChange={handleChange}
+                            value={formData.divisionCode}
+                            required
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor='divisionName'>Division Name:</label>
+                        <input
+                            type='text'
+                            id='divisionName'
+                            name='divisionName'
+                            className='divisionName'
+                            onChange={handleChange}
+                            value={formData.divisionName}
                             required
                         />
                     </div>
@@ -92,7 +123,6 @@ const EditBarangMasuk = ({ item, onUpdate, onClose }) => {
                     </button>
                     <button type='button' onClick={onClose} className='close-button' disabled={editLoading}>
                         {editLoading ? <LoadingScreen/> : 'Cancel'}
-
                     </button>
                 </div>
             </form>

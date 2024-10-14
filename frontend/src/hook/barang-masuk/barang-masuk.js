@@ -14,8 +14,11 @@ export const useBarangMasuk = () => {
         part_number: '',
         part_name: '',
         uom: '',
-        qty: ''
+        qty: '',
+        divisionCode: '',
+        divisionName: '',
     });
+    const [errorMessage, setErrorMessage] = useState('');
     const itemsPerPage = 10;
 
     // Fetch Data
@@ -64,13 +67,19 @@ export const useBarangMasuk = () => {
                     part_number: '',
                     part_name: '',
                     uom: '',
-                    qty: ''
+                    qty: '',
+                    divisionCode: '',
+                    divisionName: '',
                 });
+                setErrorMessage('');
             } else {
-                console.error('Error:', response.statusText);
+                const errorData = await response.json();
+                setErrorMessage(errorData.message || 'Failed to submit form');
+                console.log(errorData);
             }
         } catch (err) {
             console.error('Error:', err.message);
+            setErrorMessage('An error occurred while submitting the form.')
         } finally {
             setFormLoading(false);
         }
@@ -118,20 +127,27 @@ export const useBarangMasuk = () => {
     const filteredData = dataBarangMasuk.filter(item =>
         item.doc_no.toLowerCase().includes(search.toLowerCase()) ||
         item.part_number.toLowerCase().includes(search.toLowerCase()) ||
-        item.part_name.toLowerCase().includes(search.toLowerCase())
+        item.part_name.toLowerCase().includes(search.toLowerCase()) ||
+        item.divisionCode.toLowerCase().includes(search.toLowerCase()) || 
+        item.divisionName.toLowerCase().includes(search.toLowerCase())
     );
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
     const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
-
     // Edit and Delete Handlers
     const handleDelete = async (id) => {
         setLoading(true);
         try {
-            const res = await fetch(`http://localhost:3000/Barang-masuk/${id}`, { method: 'DELETE' });
-            if (res.ok) fetchData();
+            const res = await fetch(`http://localhost:3000/Barang-masuk/${id}`, { 
+                method: 'DELETE' 
+            });
+            if (res.ok) {
+                fetchData()
+            }else {
+                console.log('Failed to delete data');
+            }
         } catch (err) {
             console.error('Error deleting item:', err.message);
         } finally {
@@ -161,12 +177,18 @@ export const useBarangMasuk = () => {
 
     const formatDate = (dateString) => {
         const date = new Date(dateString);
-        const options = { day: '2-digit', month: 'long', year: 'numeric' };
+        const options = { 
+            day: '2-digit', 
+            month: 'long', 
+            year: 'numeric' 
+        };
         return date.toLocaleDateString('id-ID', options).replace(/\s/g, '-');
     };
 
     const formatPrice = (amount) => {
-        return new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(amount);
+        return new Intl.NumberFormat('id-ID', { 
+            minimumFractionDigits: 0 
+        }).format(amount);
     };
 
     useEffect(() => {
@@ -183,6 +205,7 @@ export const useBarangMasuk = () => {
         loading,
         currentItems,
         totalPages,
+        errorMessage,
         handleDelete,
         handleEdit,
         handleUpdate,

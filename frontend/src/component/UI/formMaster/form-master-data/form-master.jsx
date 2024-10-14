@@ -1,20 +1,27 @@
+import ErrorMessage from '../../Error-message/error-message';
 import LoadingScreen from '../../loading/loading';
 import './form-master.css';
 
 const Formmaster = ({masterDataHook}) => {
     const { 
-        isLoading,
+        loading,
         submitHandler, 
+        errorMessage,
         changeHandler,
         formData
     } = masterDataHook;
         
     return (
         <div className='form-containers'>
-            {isLoading ? (
+            {loading ? (
                 <LoadingScreen />
             ): (
                 <form action='/Master-data' className='form-control' method='POST' onSubmit={submitHandler}>
+                {errorMessage && (
+                    <ErrorMessage 
+                        errorMessage={errorMessage}
+                    />
+                )}
                 <div className="form-group">
                     <label htmlFor='part_number'>Part Number:</label>
                     <input
@@ -51,8 +58,8 @@ const Formmaster = ({masterDataHook}) => {
                         required
                     />
                 </div>
-                <button type='submit' className='btn' disabled={isLoading}>
-                    {isLoading ? <LoadingScreen /> : 'Submit'}
+                <button type='submit' className='btn' disabled={loading}>
+                    {loading ? <LoadingScreen /> : 'Submit'}
                 </button>   
             </form>
             )}

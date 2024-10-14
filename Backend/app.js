@@ -220,27 +220,32 @@ app.get('/Division-data', async(req, res) => {
 //server barang-masuk
 app.post('/Barang-masuk', async(req, res) => {
     console.log(req.body);
-    const { tanggal, doc_no, part_number, part_name, uom, qty } = req.body;
+    const { tanggal, doc_no, part_number, part_name, uom, qty, divisionCode, divisionName} = req.body;
 
     try {
         const connection = await testConnection();
-
         const [partExists] = await connection.query(
             "SELECT * FROM input_data_barang where part_number = ? AND part_name = ? AND uom = ?",
             [part_number, part_name, uom]
         );
-
+        const [divisionExists] = await connection.query(
+            "SELECT * FROM master_data_division where division_code = ? AND division_name = ?",
+            [divisionCode, divisionName]  
+        )
         if(partExists.length === 0){
             return res.status(404).json({
                 message: 'Part no found in input_data_barang'
             });
         }
-
+        if (divisionExists.length === 0) {
+            return res.status(404).json({
+                message: 'Division not found in master_data_division'
+            });
+        }
         await connection.query(
-            "INSERT INTO barang_masuk (doc_no, tanggal, part_number, part_name, uom, qty) VALUES (?, ?, ?, ?, ?, ?)",
-            [doc_no, tanggal,  part_number, part_name, uom, qty]
-        );
-            
+            "INSERT INTO barang_masuk (tanggal, division_code, division_name, doc_no, part_number, part_name, uom, qty) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+            [tanggal, divisionCode, divisionName, doc_no,  part_number, part_name, uom, qty]
+        );    
         console.log('Data saved successfully');
         res.status(201).json({
             message: 'Data saved successfully'
@@ -258,9 +263,20 @@ app.get('/Barang-masuk', async(req, res) => {
     console.log(req.body);
     try{
         const connection = await testConnection();
-        const query = `
-            SELECT * FROM barang_masuk ORDER BY tanggal;
-        `;
+        const query = `SELECT 
+                            id,
+                            division_code,
+                            division_name,
+                            doc_no,
+                            DATE_FORMAT(tanggal, '%m/%d/%y') AS tanggal,
+                            part_number,
+                            part_name,
+                            uom,
+                            qty
+                        FROM 
+                            barang_masuk
+                        ORDER BY 
+                            tanggal;`;
         const [results] = await connection.query(query);
         res.status(200).json(results);
         console.log(results)
@@ -296,15 +312,15 @@ app.delete('/Barang-masuk/:id', async(req, res) => {
 // server untuk mengganti data server
 app.put('/Barang-masuk/:id', async(req, res) => {
     const {id} = req.params;
-    const {tanggal, part_number, part_name, uom, qty} = req.body;
+    const {tanggal, divisionCode, divisionName, doc_no, part_number, part_name, uom, qty} = req.body;
 
     try{
         const connection = await testConnection();
         await  connection.query(
-            'UPDATE barang_masuk SET tanggal = ?, part_number = ?, part_name = ?, uom = ?, qty = ? WHERE id = ?', 
-            [tanggal, part_number, part_name, uom, qty, id]
+            'UPDATE barang_masuk SET tanggal = ?, division_code = ?, division_name = ?, doc_no = ?, part_number = ?, part_name =?, uom = ?, qty = ? WHERE id = ?', 
+            [tanggal, divisionCode, divisionName, doc_no, part_number, part_name, uom, qty, id]
         )
-        res.status(200).json({
+        res.status(200).json({  
             message: 'Data updated successfully'
         })
     }catch(err){
@@ -318,25 +334,31 @@ app.put('/Barang-masuk/:id', async(req, res) => {
 //server status barang keluar
 app.post("/Barang-keluar", async (req, res) => {
     console.log(req.body);
-    const { tanggal, doc_no, part_number, part_name, uom, qty } = req.body;
+    const { tanggal, divisionCode, divisionName, doc_no, part_number, part_name, uom, qty } = req.body;
 
     try {
         const connection = await testConnection();
-
         const [partExists] = await connection.query(
             "SELECT * FROM input_data_barang where part_number = ? AND part_name = ? AND uom = ?",
             [part_number, part_name, uom]
         );
-
-        if(partExists.length === 0){
+        const [divisionExists] = await connection.query(
+            "SELECT * FROM master_data_division where division_code = ? AND division_name = ?",
+            [divisionCode, divisionName]  
+        )
+        if(partExists.length === 0 ){
             return res.status(404).json({
                 message: 'Part no found in input_data_barang'
             });
         }
-
+        if (divisionExists.length === 0) {
+            return res.status(404).json({
+                message: 'Division not found in master_data_division'
+            });
+        }
         await connection.query(
-            "INSERT INTO barang_keluar (doc_no, tanggal, part_number, part_name, uom, barang_keluar_qty) VALUES (?, ?, ?, ?, ?, ?)",
-            [doc_no, tanggal,  part_number, part_name, uom, qty]
+            "INSERT INTO barang_keluar (tanggal, division_code, division_name, doc_no, part_number, part_name, uom, barang_keluar_qty) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+            [tanggal, divisionCode, divisionName, doc_no, part_number, part_name, uom, qty]
         );
         console.log('Data saved successfully');
         res.status(201).json({
@@ -356,25 +378,19 @@ app.get("/Barang-keluar", async(req, res) => {
     try{
         const connection = await testConnection();
         const query = `SELECT 
-                            bk.id,
-                            bk.tanggal,
-                            bk.doc_no,
-                            ib.part_number,
-                            ib.part_name,
-                            ib.uom,
-                            bk.barang_keluar_qty,
-                            md.division_name
+                            id,
+                            division_code,
+                            division_name,
+                            doc_no,
+                            DATE_FORMAT(tanggal, '%m/%d/%Y') AS tanggal,
+                            part_number,
+                            part_name,
+                            uom,
+                            barang_keluar_qty
                         FROM 
-                            barang_keluar bk
-                        JOIN 
-                            input_data_barang ib ON bk.part_number = ib.part_number 
-                                                AND bk.part_name = ib.part_name 
-                                                AND bk.uom = ib.uom
-                        JOIN 
-                            master_data_division md ON bk.doc_no = md.division_code
-                        ORDER BY    
-                            bk.tanggal;
-                        `;
+                            barang_keluar
+                        ORDER BY 
+                            tanggal;`;
         const [results] = await connection.query(query);
         res.status(200).json(results)
         console.log(results);
@@ -411,14 +427,14 @@ app.delete("/Barang-keluar/:id", async(req, res) => {
 // server mengupdate data barang keluar 
 app.put("/Barang-keluar/:id", async(req, res) => {
     const {id} = req.params;
-    const {tanggal, part_number, part_name, uom, qty} = req.body;
-    console.log(id, tanggal, part_number, part_name, uom, qty);
+    const {tanggal,divisionCode, divisionName, doc_no, part_number, part_name, uom, qty} = req.body;
+    console.log(id, tanggal, divisionCode, divisionName, doc_no, part_number, part_name, uom, qty);
 
     try{
         const connection = await testConnection();
         await  connection.query(
-            'UPDATE barang_keluar SET tanggal = ?, part_number = ?, part_name = ?, uom = ?, barang_keluar_qty = ? WHERE id = ?', 
-            [tanggal, part_number, part_name, uom, qty, id]
+            'UPDATE barang_keluar SET tanggal = ?, division_code = ?, division_name = ?, doc_no = ?, part_number = ?, part_name = ?, uom = ?, barang_keluar_qty = ? WHERE id = ?', 
+            [tanggal, divisionCode, divisionName, doc_no, part_number, part_name, uom, qty, id]
         )
         res.status(200).json({
             message: 'Data updated successfully'
@@ -528,48 +544,49 @@ app.get('/Sisa-stock-detail', async(req, res) => {
     try{
         const connection = await testConnection();
         const query = `SELECT * 
-                        FROM (
-                            SELECT 
-                                bm.tanggal,
-                                bm.doc_no,
-                                md.division_code AS division_id,  
-                                ib.part_number,
-                                ib.part_name,
-                                ib.uom,
-                                bm.qty AS barang_qty,
-                                'In' AS transaction_type
-                            FROM 
-                                barang_masuk bm
-                            JOIN 
-                                input_data_barang ib ON bm.part_number = ib.part_number 
-                                                    AND bm.part_name = ib.part_name 
-                                                    AND bm.uom = ib.uom
-                            JOIN 
-                                master_data_division md ON bm.doc_no = md.division_code  -- Joining to get division info
+                            FROM (
+                                SELECT 
+                                    DATE_FORMAT(bm.tanggal, '%m/%d/%Y') AS tanggal,
+                                    bm.doc_no,
+                                    md.division_code AS division_code,  
+                                    md.division_name AS division_name,  
+                                    ib.part_number,
+                                    ib.part_name,
+                                    ib.uom,
+                                    bm.qty AS barang_qty,
+                                    'In' AS transaction_type
+                                FROM 
+                                    barang_masuk bm
+                                JOIN 
+                                    input_data_barang ib ON bm.part_number = ib.part_number 
+                                                        AND bm.part_name = ib.part_name 
+                                                        AND bm.uom = ib.uom
+                                JOIN 
+                                    master_data_division md ON bm.division_code = md.division_code
 
-                            UNION ALL
+                                UNION ALL
 
-                            SELECT 
-                                bk.tanggal,
-                                bk.doc_no,
-                                md.division_code AS division_id,  
-                                ib.part_number,
-                                ib.part_name,
-                                ib.uom,
-                                bk.barang_keluar_qty AS barang_qty,
-                                'Out' AS transaction_type
-                            FROM 
-                                barang_keluar bk
-                            JOIN 
-                                input_data_barang ib ON bk.part_number = ib.part_number 
-                                                    AND bk.part_name = ib.part_name
-                                                    AND bk.uom = ib.uom
-                            JOIN 
-                                master_data_division md ON bk.doc_no = md.division_code
-                        ) AS combined_transactions
-                        ORDER BY 
-                            tanggal; -- Sort by the date column
-                        `;
+                                SELECT 
+                                    DATE_FORMAT(bk.tanggal, '%m/%d/%Y') AS tanggal,
+                                    bk.doc_no,
+                                    md.division_code AS division_code,  
+                                    md.division_name AS division_name,  
+                                    ib.part_number,
+                                    ib.part_name,
+                                    ib.uom,
+                                    bk.barang_keluar_qty AS barang_qty,
+                                    'Out' AS transaction_type
+                                FROM 
+                                    barang_keluar bk
+                                JOIN 
+                                    input_data_barang ib ON bk.part_number = ib.part_number 
+                                                        AND bk.part_name = ib.part_name
+                                                        AND bk.uom = ib.uom
+                                JOIN 
+                                    master_data_division md ON bk.division_code = md.division_code
+                            ) AS combined_transactions
+                            ORDER BY 
+                                tanggal;-- Sort by the date column`;
         const [results] = await connection.query(query, [partNumber, partName, uom, partNumber, partName, uom]);
         res.status(200).json(results);
         console.log(results);

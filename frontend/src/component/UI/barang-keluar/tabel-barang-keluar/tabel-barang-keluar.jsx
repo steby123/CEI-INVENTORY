@@ -45,6 +45,8 @@ const TableBarangKeluar = ({barangKeluar}) => {
                         <tr>
                             <th>No</th>
                             <th>Date</th>
+                            <th>Division Code</th>
+                            <th>Division Name</th>
                             <th>Doc No</th>
                             <th>Part Number</th>
                             <th>Part Name</th>
@@ -56,13 +58,15 @@ const TableBarangKeluar = ({barangKeluar}) => {
                     <tbody>
                         {currentItems.length === 0 ? (
                             <tr>
-                                <td className="no-data" colSpan="6">Tidak ada data</td>
+                                <td className="no-data" colSpan="10">No Data</td>
                             </tr>
                         ) : (
                             currentItems.map((item, index) => (
                                 <tr key={index}>
                                     <td>{index + 1 + (currentPage - 1) * 10}</td>
                                     <td>{formatDate(item.tanggal)}</td>
+                                    <td>{item.division_code}</td>
+                                    <td>{item.division_name}</td>
                                     <td>{item.doc_no}</td>
                                     <td>{item.part_number}</td>
                                     <td>{item.part_name}</td>

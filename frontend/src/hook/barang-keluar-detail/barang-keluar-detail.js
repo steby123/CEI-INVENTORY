@@ -100,7 +100,11 @@ export const BarangKeluarDetailHook = () => {
 
     const formatDate = (dateString) => {
         const date = new Date(dateString);
-        const options = { day: '2-digit', month: 'long', year: 'numeric' };
+        const options = { 
+            day: '2-digit', 
+            month: 'long', 
+            year: 'numeric' 
+        };
         return date.toLocaleDateString('id-ID', options).replace(/\s/g, '-');
     };
 

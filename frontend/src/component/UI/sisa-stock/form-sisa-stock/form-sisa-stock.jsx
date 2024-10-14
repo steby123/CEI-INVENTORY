@@ -1,4 +1,5 @@
 import { FormSisaStockHook } from '../../../../hook/sisa-stock/form-sisa-stock';
+import ErrorMessage from '../../Error-message/error-message';
 import LoadingScreen from '../../loading/loading';
 import TabelSisaStockDetail from '../tabel-sisa-stock-detail/tabel-sisa-stock-detail'; 
 import './form-sisa-stock.css';
@@ -8,6 +9,7 @@ const FormSisaStock = () => {
         showPopUp,
         stockDetails,
         loading,
+        errorMessage,
         handleSubmit,
         changeHandler,
         closePopUpHandler
@@ -16,6 +18,11 @@ const FormSisaStock = () => {
     return (
         <div className='form-containers'>
             <form className='form-control' onSubmit={handleSubmit}>
+                {errorMessage && (
+                    <ErrorMessage 
+                        errorMessage={errorMessage}
+                    />
+                )}
                 <div className="form-group">
                     <label htmlFor='part_number'>Part Number:</label>
                     <input

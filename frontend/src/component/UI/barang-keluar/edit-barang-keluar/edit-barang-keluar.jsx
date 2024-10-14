@@ -1,4 +1,5 @@
 import { EditBarangKeluarHook } from '../../../../hook/barang-keluar/edit-barang-keluar';
+import ErrorMessage from '../../Error-message/error-message';
 import LoadingScreen from '../../loading/loading';
 import './edit-barang-keluar.css';
 
@@ -6,6 +7,7 @@ const EditBarangKeluar = ({ item, onUpdate, onClose }) => {
     const {
         formData, 
         editLoading,
+        errorMessage,
         handleChange,
         handleSubmit,
     } = EditBarangKeluarHook(item, onUpdate, onClose);
@@ -13,8 +15,13 @@ const EditBarangKeluar = ({ item, onUpdate, onClose }) => {
     return (
         <div className="edit-container">
             <form onSubmit={handleSubmit}>
+                {errorMessage && (
+                    <ErrorMessage 
+                        errorMessage={errorMessage} 
+                    />
+                )}
                 <h2>Edit Outcoming Items</h2>
-                <div className="form-group">
+                    <div className="form-group">
                         <label htmlFor='tanggal'>Date:</label>
                         <input
                             type='date'
@@ -23,6 +30,30 @@ const EditBarangKeluar = ({ item, onUpdate, onClose }) => {
                             className='tanggal'
                             onChange={handleChange}
                             value={formData.tanggal}
+                            required
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor='divisionCode'>Division Code:</label>
+                        <input
+                            type='text'
+                            id='divisionCode'
+                            name='divisionCode'
+                            className='divisionCode'
+                            onChange={handleChange}
+                            value={formData.divisionCode}
+                            required
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor='divisionName'>Division Nmae:</label>
+                        <input
+                            type='text'
+                            id='divisionName'
+                            name='divisionName'
+                            className='divisionName'
+                            onChange={handleChange}
+                            value={formData.divisionName}
                             required
                         />
                     </div>

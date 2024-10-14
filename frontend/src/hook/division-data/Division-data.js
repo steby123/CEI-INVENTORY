@@ -5,6 +5,7 @@ export const DivisionDataHook = () => {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
+    const [errorMessage, setErrorMessage] = useState('');
     const [search, setSearch] = useState('');
 
     const handleSearchChange = (e) => {
@@ -109,12 +110,19 @@ export const DivisionDataHook = () => {
             const result = await response.json();
             console.log(result.message);
             if (response.ok) {
-                setFormDivision({ divisionCode: '', divisionName: '' });
-                fetchData(); // Fetch updated data
+                setFormDivision({ 
+                    divisionCode: '', 
+                    divisionName: '' 
+                });
+                fetchData(); 
+            }else {
+                const error = await response.json();
+                setErrorMessage(error.message || 'An error occurred while submitting.');
+                console.log(error)
             }
         } catch (err) {
             console.log('failed to submit', err.message);
-            throw new Error(err.message);
+            setErrorMessage('An error occurred while submitting the form.');
         } finally{
             setLoading(false)
         }
@@ -135,6 +143,7 @@ export const DivisionDataHook = () => {
         currentItems,
         search,
         loading,
+        errorMessage,
         divisionHandler,
         submitDivisionHandler,
         exportToExcel,

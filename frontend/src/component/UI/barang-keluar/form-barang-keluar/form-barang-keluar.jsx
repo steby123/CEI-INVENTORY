@@ -1,3 +1,4 @@
+import ErrorMessage from '../../Error-message/error-message';
 import LoadingScreen from '../../loading/loading';
 import './form-barang-keluar.css';
 
@@ -5,6 +6,7 @@ const FormBarangKeluar = ({barangKeluar}) => {
     const {
         formLoading,
         FormBarangKeluar,
+        errorMessage,
         changeHandler,
         submitHandler,
     } = barangKeluar;
@@ -15,6 +17,11 @@ const FormBarangKeluar = ({barangKeluar}) => {
                 <LoadingScreen /> 
             ):(
                 <form action='/Barang-keluar' className='form-control' method='POST' onSubmit={submitHandler}>
+                {errorMessage && (
+                    <ErrorMessage 
+                        errorMessage={errorMessage}
+                    />
+                )}
                 <div className="form-group">
                     <label htmlFor='part_number'>Date:</label>
                     <input
@@ -24,6 +31,30 @@ const FormBarangKeluar = ({barangKeluar}) => {
                         className='date'
                         onChange={changeHandler}
                         value={FormBarangKeluar.tanggal}
+                        required
+                    />
+                </div>
+                <div className="form-group">
+                    <label htmlFor='divisionCode'>Division Code:</label>
+                    <input
+                        type='text'
+                        id='divisionCode'
+                        name='divisionCode'
+                        className='divisionCode'
+                        onChange={changeHandler}
+                        value={FormBarangKeluar.divisionCode}
+                        required
+                    />
+                </div>
+                <div className="form-group">
+                    <label htmlFor='divisionName'>Division Nmae:</label>
+                    <input
+                        type='text'
+                        id='divisionName'
+                        name='divisionName'
+                        className='divisionName'
+                        onChange={changeHandler}
+                        value={FormBarangKeluar.divisionName}
                         required
                     />
                 </div>

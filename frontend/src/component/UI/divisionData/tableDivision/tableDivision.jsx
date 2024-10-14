@@ -37,7 +37,7 @@ const TableDivision = ({divisionData}) => {
                     <tbody>
                         {currentItems.length === 0 ? (  
                             <tr>
-                                <td className="no-data" colSpan="6">Tidak ada data</td>
+                                <td className="no-data" colSpan="3">No Data</td>
                             </tr>
                         ) : (
                             currentItems.map((item, index) => (

@@ -21,7 +21,7 @@ const Logout = () => {
                         <>
                             <button 
                                 className='logout-button'
-                                onClick={handleLogout}>
+                                onClick={handleLogout}>Logout
                                 <img 
                                     src={LogOutIcon} 
                                     alt='logout' 

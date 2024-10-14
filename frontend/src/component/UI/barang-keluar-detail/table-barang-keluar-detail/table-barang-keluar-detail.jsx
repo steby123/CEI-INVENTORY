@@ -53,7 +53,7 @@ const TableBarangKeluarDetail = ({ hookDetail }) => {
                     <tbody>
                         {currentItem.length === 0 ? (
                             <tr>
-                                <td className="no-data" colSpan="8">Tidak ada data</td>
+                                <td className="no-data" colSpan="8">No Data</td>
                             </tr>
                         ) : (
                             currentItem.map((item, index) => (

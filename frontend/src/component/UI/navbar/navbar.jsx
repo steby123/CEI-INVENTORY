@@ -20,7 +20,7 @@ const Navbar = () => {
                 <li><NavLink to="/Incoming" activeClassName="active">Incoming</NavLink></li>
                 <li><NavLink to="/Outcoming" activeClassName="active">Outcoming</NavLink></li>
                 <li><NavLink to="/Remaining-stock" activeClassName="active">remaining stock</NavLink></li>
-                <li><NavLink to="/Logout" activeClassName="active">Logout</NavLink></li> 
+                <li><NavLink to="/Logout" activeClassName="active"><i class="fas fa-power-off"></i></NavLink></li> 
             </ul>
             <img src={MenuIcon} alt="menu-icon" className="menu-icon" onClick={HandleIcon}/>
         </nav>

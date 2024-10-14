@@ -1,11 +1,9 @@
 import './error-message.css';
 
-const ErrorMessage = ({ message }) => {
-    if (!message) return null; 
-
+const ErrorMessage = ({ errorMessage }) => {
     return (
         <div className="error-message">
-            {message}
+            {typeof errorMessage === 'string' ? errorMessage : 'An error occured'}
         </div>
     );
 };

@@ -7,15 +7,18 @@ export const useBarangKeluar = () => {
     const [loading, setLoading] = useState(false);
     const [formLoading, setFormLoading] = useState(false);
     const [selectedItem, setSelectedItem] = useState(null);
+    const [errorMessage, setErrorMessage] = useState('');
     const [search, setSearch] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const [FormBarangKeluar, setFormBarangKeluar] = useState({
         tanggal: '',
+        divisionCode: '',
+        divisionName: '',
         doc_no: '',
         part_number: '',
         part_name: '',
         uom: '',
-        qty: ''
+        qty: '',
     });
     const navigate = useNavigate();
     const itemsPerPage = 10;
@@ -27,7 +30,9 @@ export const useBarangKeluar = () => {
     const filteredData = data.filter(item =>
         item.doc_no.toLowerCase().includes(search.toLowerCase()) ||
         item.part_number.toLowerCase().includes(search.toLowerCase()) ||
-        item.part_name.toLowerCase().includes(search.toLowerCase())
+        item.part_name.toLowerCase().includes(search.toLowerCase()) ||
+        item.divisionCode.toLowerCase().includes(search.toLowerCase()) || 
+        item.divisionName.toLowerCase().includes(search.toLowerCase())
     );
 
     const indexOfLastItem = currentPage * itemsPerPage;
@@ -110,12 +115,25 @@ export const useBarangKeluar = () => {
             });
             if (res.ok) {
                 await getFetchData();
-                setFormBarangKeluar({ tanggal: '', doc_no: '', part_number: '', part_name: '', uom: '', qty: '' });
+                setFormBarangKeluar({ 
+                    tanggal: '', 
+                    divisionCode: '',
+                    divisionName: '',
+                    doc_no: '', 
+                    part_number: '', 
+                    part_name: '', 
+                    uom: '', 
+                    qty: '' 
+                });
+                setErrorMessage('');
             } else {
-                console.log('Failed to submit form');
+                const errorData = await res.json();
+                setErrorMessage(errorData || 'Failed to submit form');
+                console.log(errorData);
             }
         } catch (err) {
             console.error('Error submitting form:', err.message);
+            setErrorMessage('An error occurred while submitting the form.')
         } finally {
             setFormLoading(false);
         }
@@ -168,11 +186,17 @@ export const useBarangKeluar = () => {
 
     const formatDate = (dateString) => {
         const date = new Date(dateString);
-        return date.toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' }).replace(/\s/g, '-');
+        return date.toLocaleDateString('id-ID', { 
+            day: '2-digit', 
+            month: 'long', 
+            year: 'numeric' 
+        }).replace(/\s/g, '-');
     };
 
     const formatPrice = (amount) => {
-        return new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(amount);
+        return new Intl.NumberFormat('id-ID', { 
+            minimumFractionDigits: 0 
+        }).format(amount);
     };
 
     useEffect(() => {
@@ -189,6 +213,7 @@ export const useBarangKeluar = () => {
         currentItems,
         search,
         loading,
+        errorMessage,
         handleDelete,
         handleEdit,
         handleUpdate,

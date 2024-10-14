@@ -4,6 +4,7 @@ export const FormSisaStockHook = () => {
     const [showPopUp, setShowPopUp] = useState(false);
     const [stockDetails, setStockDetails] = useState([]);
     const [formData, setFormData] = useState({partNumber:'', partName:'', uom:''}); 
+    const [errorMessage, setErrorMessage] = useState('');
     const [loading, setLoading] = useState(false);
 
     const handleSubmit = async(event) => {
@@ -11,6 +12,7 @@ export const FormSisaStockHook = () => {
         const { partName, partNumber, uom } = formData;
 
         setLoading(true);
+        setErrorMessage('');
         try{
             const response = await fetch(`http://localhost:3000/Sisa-stock-detail?partName=${partName}&partNumber=${partNumber}&uom=${uom}`);
             if (!response.ok) {
@@ -24,7 +26,7 @@ export const FormSisaStockHook = () => {
             setStockDetails(data);
             setShowPopUp(true)
         }catch(err){
-            alert(`Error: ${err.message}`);
+            setErrorMessage(err.message);
             console.log(err.message);
         } finally{
             setLoading(false);
@@ -53,6 +55,7 @@ export const FormSisaStockHook = () => {
         showPopUp,
         stockDetails,
         loading,
+        errorMessage,
         handleSubmit,
         changeHandler,
         closePopUpHandler

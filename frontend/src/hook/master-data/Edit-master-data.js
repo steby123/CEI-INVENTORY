@@ -1,30 +1,20 @@
 import { useState, useEffect } from "react";
 
-export const EditBarangMasukHook = (item, onUpdate) => {
+export const EditMasterDataHook = (item, onUpdate) => {
     const [editLoading, setEditLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     const [formData, setFormData] = useState({
-        tanggal: '',
-        doc_no: '',
-        part_number: '',
-        part_name: '',
-        uom: '',
-        qty: '',
-        divisionCode: '',
-        divisionName: '',
+        partNumber: '',
+        partName: '',
+        uom: ''
     });
 
     useEffect(() => {
         if (item) {
             setFormData({
-                tanggal: item.tanggal,
-                doc_no: item.doc_no,
-                part_number: item.part_number,
-                part_name: item.part_name,
-                uom: item.uom,
-                qty: item.qty,
-                divisionCode: item.divisionCode,
-                divisionName: item.divisionName
+                partNumber: item.partNumber,
+                partName: item.partName,
+                uom: item.uom
             });
         }
     }, [item]);
@@ -41,7 +31,7 @@ export const EditBarangMasukHook = (item, onUpdate) => {
         e.preventDefault();
         setEditLoading(true)
         try {
-            const res = await fetch(`http://localhost:3000/Barang-masuk/${item.id}`, {
+            const res = await fetch(`http://localhost:3000/Master-data/${item.id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
